@@ -14,9 +14,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="at.technikumwien.frontend.HelloController">
+<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="at.technikumwien.frontend.HelloController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -37,8 +35,9 @@
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
-                            <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Aktualisieren" />
+                            <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onUpdateCurrentOverviewButtonClick" text="Aktualisieren" />
                             <Text layoutX="14.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Coverage:" wrappingWidth="107.13671875" />
+                     <Text fx:id="currentOverviewTextField" layoutX="14.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="168.47006225585938" />
                         </children></AnchorPane>
                 </content>
             </Tab>
