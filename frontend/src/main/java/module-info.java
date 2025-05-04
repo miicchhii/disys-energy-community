@@ -9,7 +9,8 @@ module at.technikumwien.frontend {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires com.almasb.fxgl.all;
-    requires java.desktop;
+    requires com.fasterxml.jackson.databind;
+    requires java.net.http;
 
     opens at.technikumwien.frontend to javafx.fxml;
     exports at.technikumwien.frontend;
