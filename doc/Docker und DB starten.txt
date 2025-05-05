@@ -1,0 +1,9 @@
+Docker und DB starten:
+1. in /infrastructure : docker-compose up -d
+2. docker-compose exec database psql -U disysuser -d disysuser
+
+3. \conninfo
+   SELECT version();
+   \q
+
+4. DB Abfrage mit zb. GET http://localhost:8080/energy/historical?start=2025-01-10T00:00:00&end=2025-01-14T23:59:59
