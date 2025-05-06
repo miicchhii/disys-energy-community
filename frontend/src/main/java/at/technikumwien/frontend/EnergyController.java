@@ -2,27 +2,18 @@ package at.technikumwien.frontend;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.text.Text;
-
-import javafx.scene.control.TextField;
 
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class HelloController {
-    @FXML
-    private Label welcomeText;
+public class EnergyController {
 
-    @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
 
 
     @FXML
@@ -35,7 +26,7 @@ public class HelloController {
 
 
 
-    // HIER passiert der API-Call beim Button-Klick
+    // API Call
     @FXML
     protected void onUpdateCurrentOverviewButtonClick() {
         try {
@@ -79,9 +70,6 @@ public class HelloController {
     }
 
 
-
-
-
     // HISTORICAL DATA
 
     @FXML
@@ -93,15 +81,6 @@ public class HelloController {
     @FXML
     private Text historyText;
 
-
-    /*
-        @FXML
-
-        protected void onUpdateHistoryButtonClick() throws InterruptedException {
-            historyText.setText("Historie wurde aktualisiert");
-            //sleep(1000);
-            //historyText.setText("");
-        }*/
     @FXML
     protected void onUpdateHistoryButtonClick() {
         if (startDatePicker.getValue() == null || endDatePicker.getValue() == null) {

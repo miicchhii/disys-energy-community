@@ -14,24 +14,13 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/23.0.1" fx:controller="at.technikumwien.frontend.HelloController">
+<VBox alignment="CENTER" spacing="20.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="at.technikumwien.frontend.EnergyController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <TabPane prefHeight="432.0" prefWidth="640.0" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
         <tabs>
-            <Tab text="Welcome">
-                <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                        <children>
-                            <Button layoutX="218.0" layoutY="54.0" onAction="#onHelloButtonClick" prefHeight="25.0" prefWidth="204.0" text="Generate Greeting" />
-
-                            <Label fx:id="welcomeText" layoutX="189.0" layoutY="100.0" prefHeight="67.0" prefWidth="262.0" />
-                        </children>
-                    </AnchorPane>
-                </content>
-            </Tab>
-            <Tab text="Aktuell">
+            <Tab text="Current">
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
@@ -41,7 +30,7 @@
                         </children></AnchorPane>
                 </content>
             </Tab>
-            <Tab text="Historie">
+            <Tab text="Historical">
                 <content>
                     <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                         <children>
@@ -66,7 +55,7 @@
                                     </Button>
                                 </children>
                             </HBox>
-                            <LineChart layoutX="14.0" layoutY="77.0" prefHeight="320.0" prefWidth="605.0">
+                            <LineChart layoutX="14.0" layoutY="144.0" prefHeight="253.0" prefWidth="605.0">
                                 <xAxis>
                                     <CategoryAxis side="BOTTOM" />
                                 </xAxis>
@@ -74,14 +63,9 @@
                                     <NumberAxis side="LEFT" />
                                 </yAxis>
                             </LineChart>
-                            <Text fx:id="historyText" layoutX="477.0" layoutY="51.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="149.0" />
+                            <Text fx:id="historyText" layoutX="14.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="265.0" />
                         </children>
                     </AnchorPane>
-                </content>
-            </Tab>
-            <Tab text="Query">
-                <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                 </content>
             </Tab>
         </tabs>

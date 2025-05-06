@@ -129,7 +129,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>at.technikumwien.frontend/at.technikumwien.frontend.HelloApplication</mainClass>
+                            <mainClass>at.technikumwien.frontend/at.technikumwien.frontend.EnergyApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>

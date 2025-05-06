@@ -1,7 +1,7 @@
 package at.technikumwien.frontend;
 
 public class EnergyCurrentData {
-    private String hour; // ⬅️ das ist neu!
+    private String hour;
     private double communityDepleted;
     private double gridPortion;
 
