@@ -1,9 +1,18 @@
 package at.technikumwien.backend.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "historical_entry")
 public class HistoricalEntry {
+
+    @Id
     private LocalDateTime hour;
+
     private double communityProduced;
     private double communityUsed;
     private double gridUsed;
@@ -14,6 +23,10 @@ public class HistoricalEntry {
         this.communityProduced = communityProduced;
         this.communityUsed = communityUsed;
         this.gridUsed = gridUsed;
+    }
+
+    public HistoricalEntry() {
+
     }
 
     public LocalDateTime getHour() {
