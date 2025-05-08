@@ -1,0 +1,12 @@
+Table historical_entries {
+  hour datetime [pk, note: 'Hour of the entry']
+  community_produced double [note: 'Amount of energy produced by the community']
+  community_used double [note: 'Amount of energy used by the community']
+  grid_used double [note: 'Amount of energy used from the grid']
+}
+
+Table current_entries {
+  hour datetime [pk, note: 'Hour of the entry']
+  community_depleted double [note: 'Amount of energy depleted from community storage']
+  grid_portion double [note: 'Portion of energy coming from the grid']
+}
