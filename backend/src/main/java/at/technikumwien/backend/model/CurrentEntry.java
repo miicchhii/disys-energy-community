@@ -1,9 +1,17 @@
 package at.technikumwien.backend.model;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
 import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "current_entry")
 public class CurrentEntry {
+    @Id
     private LocalDateTime hour;
+
     private double communityDepleted;
     private double gridPortion;
 
@@ -12,6 +20,10 @@ public class CurrentEntry {
         this.hour = hour;
         this.communityDepleted = communityDepleted;
         this.gridPortion = gridPortion;
+    }
+
+    public CurrentEntry() {
+
     }
 
     public LocalDateTime getHour() {
