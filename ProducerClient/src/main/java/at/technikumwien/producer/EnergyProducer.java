@@ -1,0 +1,69 @@
+package at.technikumwien.user;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.rabbitmq.client.Channel;
+import com.rabbitmq.client.Connection;
+import com.rabbitmq.client.ConnectionFactory;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+public class EnergyUser {
+    private static final String QUEUE_NAME = "energy";
+    private static final String RABBITMQ_HOST = System.getenv().getOrDefault("RABBITMQ_HOST", "localhost");
+
+    private final ConnectionFactory factory;
+    private final ObjectMapper mapper = new ObjectMapper();
+    private final Random random = new Random();
+    private final DateTimeFormatter fmt = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+
+    public EnergyUser() {
+        factory = new ConnectionFactory();
+        factory.setHost(RABBITMQ_HOST);
+    }
+
+    public void start() throws Exception {
+        try (Connection conn = factory.newConnection();
+             Channel channel = conn.createChannel()) {
+            channel.queueDeclare(QUEUE_NAME, true, false, false, null);
+
+            while (true) {
+                LocalDateTime now = LocalDateTime.now();
+                double kwh = generateUsage(now.getHour());
+                String timestamp = now.format(fmt);
+
+                ObjectNode msg = mapper.createObjectNode();
+                msg.put("type", "USER");
+                msg.put("association", "COMMUNITY");
+                msg.put("kwh", String.format("%.6f", kwh));
+                msg.put("datetime", timestamp);
+
+                byte[] body = mapper.writeValueAsBytes(msg);
+                channel.basicPublish("", QUEUE_NAME, null, body);
+
+                System.out.printf("[User] Sent: %s%n", msg.toString());
+                TimeUnit.SECONDS.sleep(5);
+            }
+        }
+    }
+
+    private double generateUsage(int hour) {
+        // Spitzenlast morgens (6-9) und abends (17-20)
+        if ((hour >= 6 && hour < 10) || (hour >= 17 && hour < 21)) {
+            // zwischen 0.002 und 0.005 kWh
+            return 0.002 + random.nextDouble() * 0.003;
+        }
+        // sonst zwischen 0.0005 und 0.0015 kWh
+        return 0.0005 + random.nextDouble() * 0.001;
+    }
+
+    public static void main(String[] args) {
+        try {
+            new EnergyUser().start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
