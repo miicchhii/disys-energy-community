@@ -7,9 +7,8 @@
 
     <modules>
         <module>shared-models</module>
-        <module>echo-service</module>
+        <module>energy-service</module>
         <module>producer</module>
-        <module>TextReverse-service</module>
     </modules>
 
 

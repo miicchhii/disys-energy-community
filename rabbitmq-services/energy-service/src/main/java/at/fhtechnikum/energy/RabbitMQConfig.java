@@ -1,4 +1,4 @@
-package at.fhtechnikum.echo;
+package at.fhtechnikum.energy;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
@@ -10,12 +10,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitMQConfig {
 
-    public static final String INPUT_QUEUE = "echo.input";
-    public static final String OUTPUT_QUEUE = "echo.output";
-    public static final String EXCHANGE_NAME = "echo.processing.exchange";
+    public static final String INPUT_QUEUE = "energy.input";
+    public static final String OUTPUT_QUEUE = "energy.output";
+    public static final String EXCHANGE_NAME = "energy.processing.exchange";
 
     @Bean
-    public DirectExchange textProcessingExchange() {
+    public DirectExchange energyProcessingExchange() {
         return new DirectExchange(EXCHANGE_NAME);
     }
 
@@ -31,20 +31,24 @@ public class RabbitMQConfig {
 
     @Bean
     public Binding inputBinding() {
-        return BindingBuilder.bind(inputQueue()).to(textProcessingExchange()).with("echo.input");
+        return BindingBuilder
+                .bind(inputQueue())
+                .to(energyProcessingExchange())
+                .with(INPUT_QUEUE); // routing key: "energy.input"
     }
 
     @Bean
     public Binding outputBinding() {
-        return BindingBuilder.bind(outputQueue()).to(textProcessingExchange()).with("echo.output");
+        return BindingBuilder
+                .bind(outputQueue())
+                .to(energyProcessingExchange())
+                .with(OUTPUT_QUEUE); // routing key: "energy.output"
     }
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
         RabbitTemplate template = new RabbitTemplate(connectionFactory);
-        // serialize/deserialize messages as JSON
         template.setMessageConverter(new Jackson2JsonMessageConverter());
         return template;
     }
-
 }
