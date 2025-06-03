@@ -1,4 +1,4 @@
-package at.fhtechnikum.energy;
+package at.fhtechnikum.percentage;
 
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;

@@ -7,10 +7,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="database" />
+        <module name="usage-service" />
         <module name="UserClient" />
-        <module name="energy-service" />
         <module name="backend" />
         <module name="ProducerClient" />
+        <module name="percentage-service" />
         <module name="frontend" />
         <module name="shared-models" />
       </profile>

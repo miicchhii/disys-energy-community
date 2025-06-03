@@ -1,4 +1,4 @@
-package at.fhtechnikum.energy;
+package at.fhtechnikum.percentage;
 
 import at.fhtechnikum.shared.EnergyMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,7 +15,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 @Service
-public class EnergyService {
+public class PercentageService {
 
     @Autowired
     private RabbitTemplate rabbitTemplate;

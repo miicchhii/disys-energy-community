@@ -5,11 +5,13 @@
     <file url="file://$PROJECT_DIR$/database/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/frontend/src/main/resources" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rabbitmq-services/energy-service/src/main/java" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/rabbitmq-services/energy-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq-services/percentage-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq-services/percentage-service/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq-services/shared-models/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq-services/shared-models/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq-services/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/rabbitmq-services/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq-services/usage-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/rabbitmq-services/usage-service/src/main/resources" charset="UTF-8" />
   </component>
 </project>

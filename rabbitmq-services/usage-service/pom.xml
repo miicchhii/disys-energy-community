@@ -12,7 +12,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>energy-service</artifactId>
+    <artifactId>usage-service</artifactId>
 
     <dependencies>
         <dependency>
@@ -42,6 +42,10 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
+        <dependency>
+            <groupId>at.technikumwien</groupId>
+            <artifactId>database</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -50,7 +54,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>at.fhtechnikum.energy.EchoServiceApplication</mainClass>
+                    <mainClass>at.fhtechnikum.usage.EchoServiceApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>
