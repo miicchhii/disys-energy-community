@@ -1,10 +1,13 @@
 package at.fhtechnikum.percentage;
 
 import at.fhtechnikum.shared.EnergyMessage;
+import at.technikumwien.database.entity.CurrentEntry;
+import at.technikumwien.database.entity.HistoricalEntry;
+import at.technikumwien.database.repository.CurrentEntryRepository;
+import at.technikumwien.database.repository.HistoricalEntryRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rabbitmq.client.Channel;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.Header;
@@ -13,40 +16,54 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @Service
 public class PercentageService {
 
     @Autowired
-    private RabbitTemplate rabbitTemplate;
+    private HistoricalEntryRepository historicalRepo;
+
+    @Autowired
+    private CurrentEntryRepository currentRepo;
 
     @RabbitListener(queues = "energy.input", ackMode = "MANUAL")
-    public void processEnergy(@Payload byte[] messageBytes,
-                              Channel channel,
-                              @Header(AmqpHeaders.DELIVERY_TAG) long deliveryTag) throws IOException {
-        String jsonString = new String(messageBytes, StandardCharsets.UTF_8);
-        ObjectMapper objectMapper = new ObjectMapper();
+    public void calculatePercentage(@Payload byte[] messageBytes,
+                                    Channel channel,
+                                    @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException {
+        String json = new String(messageBytes, StandardCharsets.UTF_8);
+        ObjectMapper mapper = new ObjectMapper();
+        EnergyMessage msg = mapper.readValue(json, EnergyMessage.class);
 
-        // Empfange und deserialisiere EnergyMessage
-        EnergyMessage msg = objectMapper.readValue(jsonString, EnergyMessage.class);
+        String datetime = msg.getDatetime();
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_DATE_TIME;
+        LocalDateTime parsed = LocalDateTime.parse(datetime, formatter);
+        LocalDateTime hour = parsed.truncatedTo(ChronoUnit.HOURS);
 
-        System.out.println("=== ENERGY SERVICE ===");
-        System.out.println("Received: " + msg.getType() +
-                " | Assoc: " + msg.getAssociation() +
-                " | kWh: " + msg.getKwh() +
-                " | datetime: " + msg.getDatetime());
+        // Lade aktuelle Summen aus historical_entry
+        HistoricalEntry entry = historicalRepo.findById(hour).orElse(null);
+        if (entry == null) {
+            channel.basicAck(tag, false);
+            return; // Noch keine Daten für diese Stunde
+        }
 
+        double produced = entry.getCommunityProduced();
+        double used = entry.getCommunityUsed();
+        double gridUsed = entry.getGridUsed();
 
-        // Update einer Datenbank (Platzhalter)
-        // energyRepository.update(...);
+        double depleted = Math.min(100.0, (produced == 0) ? 100.0 : (used / produced) * 100.0);
+        double gridPortion = Math.min(100.0, (used == 0) ? 0.0 : (gridUsed / used) * 100.0);
 
-        // optional: Ergebnis/Verbrauch/Statistik in eine Output-Queue weiterleiten
-        // rabbitTemplate.convertAndSend(RabbitMQConfig.EXCHANGE_NAME,
-        //     RabbitMQConfig.OUTPUT_QUEUE, new EnergyResultMessage(...));
+        CurrentEntry currentEntry = new CurrentEntry(hour, depleted, gridPortion);
+        currentRepo.save(currentEntry);
 
-        // Message bestätigen
-        channel.basicAck(deliveryTag, false);
+        System.out.println("=== PERCENTAGE SERVICE ===");
+        System.out.printf("Hour: %s | Depleted: %.2f%% | Grid: %.2f%%%n",
+                hour, depleted, gridPortion);
+        System.out.println("==========================");
 
-        System.out.println("=======================\n");
+        channel.basicAck(tag, false);
     }
 }

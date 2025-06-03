@@ -1,10 +1,20 @@
 server:
-  port: 8081
+  port: 8083
 
 spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/disysdb
+    username: disysuser
+    password: disyspw
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
   rabbitmq:
     host: localhost
     port: 5672
     username: guest
     password: guest
-    virtual-host: /

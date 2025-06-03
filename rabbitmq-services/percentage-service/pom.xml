@@ -42,6 +42,10 @@
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
         </dependency>
+        <dependency>
+            <groupId>at.technikumwien</groupId>
+            <artifactId>database</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
