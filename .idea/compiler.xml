@@ -6,9 +6,10 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="database" />
+        <module name="UserClient" />
         <module name="energy-service" />
         <module name="backend" />
-        <module name="UserClient" />
         <module name="ProducerClient" />
         <module name="frontend" />
         <module name="shared-models" />
@@ -18,6 +19,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="backend" options="-parameters" />
+      <module name="database" options="-parameters" />
     </option>
   </component>
 </project>

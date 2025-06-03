@@ -1,5 +1,6 @@
-package at.technikumwien.backend.model;
+package at.technikumwien.database.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -12,7 +13,7 @@ public class HistoricalEntry {
 
     @Id
     private LocalDateTime hour;
-
+    @Column(nullable = false)
     private double communityProduced;
     private double communityUsed;
     private double gridUsed;
@@ -44,4 +45,21 @@ public class HistoricalEntry {
     public double getGridUsed() {
         return gridUsed;
     }
+    public void setHour(LocalDateTime hour) {
+        this.hour = hour;
+    }
+
+    public void setCommunityProduced(double communityProduced) {
+        this.communityProduced = communityProduced;
+    }
+
+    public void setCommunityUsed(double communityUsed) {
+        this.communityUsed = communityUsed;
+    }
+
+    public void setGridUsed(double gridUsed) {
+        this.gridUsed = gridUsed;
+    }
+
+
 }
