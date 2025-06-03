@@ -34,7 +34,7 @@ public class RabbitMQConfig {
         return BindingBuilder
                 .bind(inputQueue())
                 .to(energyProcessingExchange())
-                .with(INPUT_QUEUE); // routing key: "energy.input"
+                .with(INPUT_QUEUE);
     }
 
     @Bean
@@ -42,7 +42,7 @@ public class RabbitMQConfig {
         return BindingBuilder
                 .bind(outputQueue())
                 .to(energyProcessingExchange())
-                .with(OUTPUT_QUEUE); // routing key: "energy.output"
+                .with(OUTPUT_QUEUE);
     }
 
     @Bean
