@@ -8,7 +8,7 @@
     <modules>
         <module>shared-models</module>
         <module>energy-service</module>
-        <module>producer</module>
+
     </modules>
 
 

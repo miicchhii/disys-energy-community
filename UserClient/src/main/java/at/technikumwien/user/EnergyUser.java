@@ -1,4 +1,4 @@
-package at.technikumwien.producer;
+package at.technikumwien.user;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -12,26 +12,20 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
-public class EnergyProducer {
-    private static final String QUEUE_NAME = "energy";
+public class EnergyUser {
+    private static final String QUEUE_NAME = "energy.input";
     private static final String RABBITMQ_HOST = System.getenv().getOrDefault("RABBITMQ_HOST", "localhost");
-    private static final double LATITUDE = Double.parseDouble(
-            System.getenv().getOrDefault("LATITUDE", "47.3769")
-    );
-    private static final double LONGITUDE = Double.parseDouble(
-            System.getenv().getOrDefault("LONGITUDE", "8.5417")
-    );
 
     private final ConnectionFactory factory;
     private final ObjectMapper mapper = new ObjectMapper();
     private final Random random = new Random();
-    private final HttpClient http = HttpClient.newHttpClient();
     private final DateTimeFormatter fmt = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
-    public EnergyProducer() {
+    public EnergyUser() {
         factory = new ConnectionFactory();
         factory.setHost(RABBITMQ_HOST);
     }
@@ -42,53 +36,38 @@ public class EnergyProducer {
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
 
             while (true) {
-                double weatherFactor = fetchWeatherFactor();
-                // Basisproduktion zwischen 0.001 und 0.005 kWh
-                double base = 0.001 + random.nextDouble() * 0.004;
-                double kwh = base * weatherFactor;
-                String timestamp = LocalDateTime.now().format(fmt);
+                LocalDateTime now = LocalDateTime.now();
+                double kwh = generateUsage(now.getHour());
+                String timestamp = now.format(fmt);
 
                 ObjectNode msg = mapper.createObjectNode();
-                msg.put("type", "PRODUCER");
+                msg.put("type", "USER");
                 msg.put("association", "COMMUNITY");
-                msg.put("kwh", String.format("%.6f", kwh));
+                msg.put("kwh", String.format(Locale.US,"%.6f", kwh));
                 msg.put("datetime", timestamp);
 
                 byte[] body = mapper.writeValueAsBytes(msg);
                 channel.basicPublish("", QUEUE_NAME, null, body);
 
-                System.out.printf("[Producer] Sent: %s%n", msg.toString());
+                System.out.printf("[User] Sent: %s%n", msg.toString());
                 TimeUnit.SECONDS.sleep(5);
             }
         }
     }
 
-    private double fetchWeatherFactor() {
-        try {
-            String url = String.format(
-                    "https://api.open-meteo.com/v1/forecast?latitude=%.4f&longitude=%.4f&current_weather=true",
-                    LATITUDE, LONGITUDE
-            );
-            HttpRequest req = HttpRequest.newBuilder()
-                    .uri(URI.create(url))
-                    .GET()
-                    .build();
-            HttpResponse<InputStream> resp = http.send(req, HttpResponse.BodyHandlers.ofInputStream());
-            var node = mapper.readTree(resp.body()).path("current_weather");
-            int code = node.path("weathercode").asInt();
-            // weathercode 0 = klar, 1–3 gering bewölkt,  >50 Regen etc.
-            if (code == 0) return 1.5;
-            if (code <= 3) return 1.2;
-            return 0.8;
-        } catch (Exception e) {
-            System.err.println("Fehler beim Wetterabruf, nutze Faktor 1.0: " + e.getMessage());
-            return 1.0;
+    private double generateUsage(int hour) {
+        // Spitzenlast morgens (6-9) und abends (17-20)
+        if ((hour >= 6 && hour < 10) || (hour >= 17 && hour < 21)) {
+            // zwischen 0.002 und 0.005 kWh
+            return 0.002 + random.nextDouble() * 0.003;
         }
+        // sonst zwischen 0.0005 und 0.0015 kWh
+        return 0.0005 + random.nextDouble() * 0.001;
     }
 
     public static void main(String[] args) {
         try {
-            new EnergyProducer().start();
+            new EnergyUser().start();
         } catch (Exception e) {
             e.printStackTrace();
         }
