@@ -1,7 +1,7 @@
 package at.technikumwien.backend.service;
 
-import at.technikumwien.backend.model.CurrentEntry;
-import at.technikumwien.backend.model.HistoricalEntry;
+import at.technikumwien.database.entity.CurrentEntry;
+import at.technikumwien.database.entity.HistoricalEntry;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;

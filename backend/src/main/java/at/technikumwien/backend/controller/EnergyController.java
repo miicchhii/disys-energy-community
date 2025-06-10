@@ -1,7 +1,7 @@
 package at.technikumwien.backend.controller;
 
-import at.technikumwien.backend.model.CurrentEntry;
-import at.technikumwien.backend.model.HistoricalEntry;
+import at.technikumwien.database.entity.CurrentEntry;
+import at.technikumwien.database.entity.HistoricalEntry;
 import at.technikumwien.backend.service.EnergyService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
