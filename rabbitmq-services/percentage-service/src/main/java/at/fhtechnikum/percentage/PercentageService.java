@@ -29,7 +29,7 @@ public class PercentageService {
     @Autowired
     private CurrentEntryRepository currentRepo;
 
-    @RabbitListener(queues = "energy.input", ackMode = "MANUAL")
+    @RabbitListener(queues = "energy.output", ackMode = "MANUAL")
     public void calculatePercentage(@Payload byte[] messageBytes,
                                     Channel channel,
                                     @Header(AmqpHeaders.DELIVERY_TAG) long tag) throws IOException {

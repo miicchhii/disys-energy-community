@@ -61,5 +61,13 @@ public class HistoricalEntry {
         this.gridUsed = gridUsed;
     }
 
-
+    @Override
+    public String toString() {
+        return "HistoricalEntry{" +
+                "hour=" + hour +
+                ", produced=" + communityProduced +
+                ", used=" + communityUsed +
+                ", grid=" + gridUsed +
+                '}';
+    }
 }
