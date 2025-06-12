@@ -20,7 +20,7 @@
     <name>RabbitMQ Services</name>
 
     <properties>
-        <java.version>24</java.version>
+        <java.version>23</java.version>
         <spring.boot.version>3.2.5</spring.boot.version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>

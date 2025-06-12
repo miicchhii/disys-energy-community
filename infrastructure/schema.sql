@@ -1,4 +1,4 @@
-CREATE TABLE historical_entries
+CREATE TABLE historical_entry
 (
     hour               TIMESTAMP PRIMARY KEY,
     community_produced DOUBLE PRECISION, -- Amount of energy produced by the community
@@ -6,7 +6,7 @@ CREATE TABLE historical_entries
     grid_used          DOUBLE PRECISION  -- Amount of energy used from the grid
 );
 
-CREATE TABLE current_entries
+CREATE TABLE current_entry
 (
     hour               TIMESTAMP PRIMARY KEY,
     community_depleted DOUBLE PRECISION, -- Amount of energy depleted from community storage
