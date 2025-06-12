@@ -73,6 +73,10 @@ public class UsageService {
         }
 
         repository.save(entry);
+
+        // weiterleiten an percentageservice
+        rabbitTemplate.convertAndSend("energy.processing.exchange", "energy.output", msg);
+
         channel.basicAck(deliveryTag, false);
         System.out.println("Updated DB entry: " + entry);
         System.out.println("=======================");
