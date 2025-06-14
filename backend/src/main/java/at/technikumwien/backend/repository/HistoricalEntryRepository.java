@@ -1,4 +1,4 @@
-package at.technikumwien.database.repository;
+package at.technikumwien.backend.repository;
 
 import at.technikumwien.database.entity.HistoricalEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
