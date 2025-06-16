@@ -31,7 +31,7 @@ public class EnergyController {
     protected void onUpdateCurrentOverviewButtonClick() {
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(new URI("http://localhost:8080/energy/current"))
+                    .uri(new URI("http://localhost:8081/energy/current"))
                     .GET()
                     .build();
 
@@ -91,7 +91,7 @@ public class EnergyController {
         String start = startDatePicker.getValue().atStartOfDay().toString();
         String end = endDatePicker.getValue().atTime(23, 59).toString();
 
-        String url = String.format("http://localhost:8080/energy/historical?start=%s&end=%s", start, end);
+        String url = String.format("http://localhost:8081/energy/historical?start=%s&end=%s", start, end);
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
