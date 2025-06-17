@@ -1,5 +1,7 @@
 package at.technikumwien.producer;
 import java.util.Locale;
+
+import at.fhtechnikum.shared.EnergyMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rabbitmq.client.Channel;
@@ -43,22 +45,23 @@ public class EnergyProducer {
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
 
             while (true) {
+                EnergyMessage msg = new EnergyMessage();
                 double weatherFactor = fetchWeatherFactor();
                 // Basisproduktion zwischen 0.001 und 0.005 kWh
                 double base = 0.001 + random.nextDouble() * 0.004;
                 double kwh = base * weatherFactor;
                 String timestamp = LocalDateTime.now().format(fmt);
 
-                ObjectNode msg = mapper.createObjectNode();
-                msg.put("type", "PRODUCER");
-                msg.put("association", "COMMUNITY");
-                msg.put("kwh", String.format(Locale.US,"%.6f", kwh));
-                msg.put("datetime", timestamp);
+                msg.setType("PRODUCER");
+                msg.setAssociation("COMMUNITY");
+                msg.setKwh(kwh);
+                msg.setDatetime(timestamp);
 
                 byte[] body = mapper.writeValueAsBytes(msg);
                 channel.basicPublish("", QUEUE_NAME, null, body);
 
-                System.out.printf("[Producer] Sent: %s%n", msg.toString());
+                System.out.printf("[Producer] Sent -> kWh: %s | Timestamp: %s%n", msg.getKwh(), msg.getDatetime());
+
                 TimeUnit.SECONDS.sleep(5);
             }
         }
