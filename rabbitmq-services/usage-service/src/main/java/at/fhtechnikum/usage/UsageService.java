@@ -61,11 +61,14 @@ public class UsageService {
             case "USER" -> {
                 if ("COMMUNITY".equals(msg.getAssociation())) {
                     double producedAvailable = entry.getCommunityProduced() - entry.getCommunityUsed();
-                    double fromCommunity = Math.min(msg.getKwh(), producedAvailable);
+
+                    // Wenn nichts (mehr) verfügbar ist, ist fromCommunity = 0
+                    double fromCommunity = (producedAvailable > 0) ? Math.min(msg.getKwh(), producedAvailable) : 0.0;
                     double fromGrid = msg.getKwh() - fromCommunity;
 
-                    entry.setCommunityUsed(entry.getCommunityUsed() + fromCommunity);
+                    entry.setCommunityUsed(entry.getCommunityUsed() + msg.getKwh());
                     entry.setGridUsed(entry.getGridUsed() + fromGrid);
+
                 } else if ("GRID".equals(msg.getAssociation())) {
                     entry.setGridUsed(entry.getGridUsed() + msg.getKwh());
                 }
