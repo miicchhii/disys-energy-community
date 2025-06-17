@@ -1,5 +1,6 @@
 package at.technikumwien.user;
 
+import at.fhtechnikum.shared.EnergyMessage;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.rabbitmq.client.Channel;
@@ -24,7 +25,7 @@ public class EnergyUser {
     private final ObjectMapper mapper = new ObjectMapper();
     private final Random random = new Random();
     private final DateTimeFormatter fmt = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-
+    EnergyMessage msg = new EnergyMessage();
     public EnergyUser() {
         factory = new ConnectionFactory();
         factory.setHost(RABBITMQ_HOST);
@@ -36,20 +37,22 @@ public class EnergyUser {
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
 
             while (true) {
+
+
                 LocalDateTime now = LocalDateTime.now();
                 double kwh = generateUsage(now.getHour());
                 String timestamp = now.format(fmt);
 
-                ObjectNode msg = mapper.createObjectNode();
-                msg.put("type", "USER");
-                msg.put("association", "COMMUNITY");
-                msg.put("kwh", String.format(Locale.US,"%.6f", kwh));
-                msg.put("datetime", timestamp);
+                msg.setType("USER");
+                msg.setAssociation("COMMUNITY");
+                msg.setKwh(kwh);
+                msg.setDatetime(timestamp);
+
 
                 byte[] body = mapper.writeValueAsBytes(msg);
                 channel.basicPublish("", QUEUE_NAME, null, body);
 
-                System.out.printf("[User] Sent: %s%n", msg.toString());
+                System.out.printf("[User] Sent -> kWh: %s | Timestamp: %s%n", msg.getKwh(), msg.getDatetime());
                 TimeUnit.SECONDS.sleep(5);
             }
         }
