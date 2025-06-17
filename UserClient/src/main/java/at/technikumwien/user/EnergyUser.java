@@ -36,12 +36,13 @@ public class EnergyUser {
              Channel channel = conn.createChannel()) {
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
 
-            while (true) {
-
+            int num_demo_messages = 29000;
+            int counter = 0;
+            while (counter < num_demo_messages) {
 
                 LocalDateTime now = LocalDateTime.now();
                 double kwh = generateUsage(now.getHour());
-                String timestamp = now.format(fmt);
+                String timestamp = LocalDateTime.now().minusDays(20).plusSeconds(counter* 60L).format(fmt);
 
                 msg.setType("USER");
                 msg.setAssociation("COMMUNITY");
@@ -53,7 +54,8 @@ public class EnergyUser {
                 channel.basicPublish("", QUEUE_NAME, null, body);
 
                 System.out.printf("[User] Sent -> kWh: %s | Timestamp: %s%n", msg.getKwh(), msg.getDatetime());
-                TimeUnit.SECONDS.sleep(5);
+                counter++;
+                //TimeUnit.SECONDS.sleep(5);
             }
         }
     }
