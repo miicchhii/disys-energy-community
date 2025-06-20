@@ -55,14 +55,7 @@
                                     </Button>
                                 </children>
                             </HBox>
-                            <LineChart layoutX="14.0" layoutY="144.0" prefHeight="253.0" prefWidth="605.0">
-                                <xAxis>
-                                    <CategoryAxis side="BOTTOM" />
-                                </xAxis>
-                                <yAxis>
-                                    <NumberAxis side="LEFT" />
-                                </yAxis>
-                            </LineChart>
+
                             <Text fx:id="historyText" layoutX="14.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="265.0" />
                         </children>
                     </AnchorPane>
