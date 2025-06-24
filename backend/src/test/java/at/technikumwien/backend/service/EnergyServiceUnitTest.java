@@ -2,69 +2,80 @@ package at.technikumwien.backend.service;
 
 import at.technikumwien.database.entity.CurrentEntry;
 import at.technikumwien.database.entity.HistoricalEntry;
+import at.technikumwien.database.repository.CurrentEntryRepository;
+import at.technikumwien.database.repository.HistoricalEntryRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class EnergyServiceUnitTest {
 
+    @Mock
+    private HistoricalEntryRepository historicalRepo;
+
+    @Mock
+    private CurrentEntryRepository currentRepo;
+
+    @InjectMocks
     private EnergyService energyService;
+
+    private CurrentEntry sampleCurrent;
+    private HistoricalEntry sampleHistorical;
 
     @BeforeEach
     void setUp() {
-        //Mit Demo-Daten vom 2025-01-10 über 5 Tage
-        //energyService = new EnergyService();
+        // Beispiel‐Daten für CurrentEntry
+        sampleCurrent = new CurrentEntry();
+        sampleCurrent.setHour(LocalDateTime.of(2025, 1, 1, 12, 0));
+        sampleCurrent.setCommunityDepleted(123.45);
+        sampleCurrent.setGridPortion(67.89);
+
+        // Beispiel‐Daten für HistoricalEntry
+        sampleHistorical = new HistoricalEntry();
+        sampleHistorical.setHour(LocalDateTime.of(2025, 1, 1, 1, 0));
+        // statt setValue(...) nutzen wir den vorhandenen Setter
+        sampleHistorical.setCommunityProduced(42.0);
+        sampleHistorical.setCommunityUsed(0.0);
+        sampleHistorical.setGridUsed(0.0);
     }
 
     @Test
-    void getCurrentData_containsSingleDemoEntry() {
-        List<CurrentEntry> current = energyService.getCurrentData();
+    void getCurrentData_returnsRepoData() {
+        when(currentRepo.findAll()).thenReturn(List.of(sampleCurrent));
 
-        // Im Service ist genau eine feste CurrentEntry vordefiniert
-        assertThat(current).hasSize(1);
-        CurrentEntry e = current.get(0);
-        assertThat(e.getHour()).isEqualTo(LocalDateTime.parse("2025-01-10T14:00:00"));
-        assertThat(e.getCommunityDepleted()).isEqualTo(100.00);
-        assertThat(e.getGridPortion()).isEqualTo(5.63);
+        List<CurrentEntry> result = energyService.getCurrentData();
+
+        assertThat(result)
+                .hasSize(1)
+                .containsExactly(sampleCurrent);
+
+        verify(currentRepo).findAll();
     }
 
     @Test
-    void getHistoricalData_filtersByStartAndEnd() {
-        LocalDateTime start = LocalDateTime.parse("2025-01-11T00:00:00");
-        LocalDateTime end   = LocalDateTime.parse("2025-01-12T23:00:00");
+    void getHistoricalData_returnsRepoDataBetween() {
+        LocalDateTime start = LocalDateTime.of(2025, 1, 1, 0, 0);
+        LocalDateTime end   = LocalDateTime.of(2025, 1, 1, 23, 59);
 
-        List<HistoricalEntry> hist = energyService.getHistoricalData(start, end);
+        when(historicalRepo.findByHourBetween(start, end))
+                .thenReturn(List.of(sampleHistorical));
 
-        // 2 volle Tage à 24 Stunden
-        assertThat(hist).hasSize(48);
+        List<HistoricalEntry> result = energyService.getHistoricalData(start, end);
 
-        // Erster und letzter Timestamp stimmen
-        assertThat(hist.get(0).getHour()).isEqualTo(start);
-        assertThat(hist.get(hist.size()-1).getHour()).isEqualTo(end);
-    }
+        assertThat(result)
+                .hasSize(1)
+                .containsExactly(sampleHistorical);
 
-    @Test
-    void generateDemoDataRange_createsCorrectCount() throws Exception {
-        // Über Reflection auf private Methode zugreifen (optional)
-        var method = EnergyService.class.getDeclaredMethod("generateDemoDataRange", LocalDate.class, int.class);
-        method.setAccessible(true);
-        @SuppressWarnings("unchecked")
-        List<HistoricalEntry> allData = (List<HistoricalEntry>) method.invoke(energyService, LocalDate.of(2025,1,10), 3);
-
-        // 3 Tage * 24 Stunden
-        assertThat(allData).hasSize(3 * 24);
-    }
-
-    @Test
-    void round_shouldRoundToThreeDecimals() throws Exception {
-        var method = EnergyService.class.getDeclaredMethod("round", double.class);
-        method.setAccessible(true);
-        double rounded = (double) method.invoke(energyService, 2.34567);
-        assertThat(rounded).isEqualTo(2.346);
+        verify(historicalRepo).findByHourBetween(start, end);
     }
 }

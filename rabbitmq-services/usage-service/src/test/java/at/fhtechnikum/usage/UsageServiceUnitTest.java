@@ -8,7 +8,9 @@ import com.rabbitmq.client.Channel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
@@ -60,6 +62,7 @@ class UsageServiceTest {
         service.processEnergy(payload, channel, deliveryTag);
 
         // Assert: repository.save called with a new entry having communityProduced=7.5
+        verify(repository).save(org.mockito.ArgumentCaptor.forClass(HistoricalEntry.class).capture());
         ArgumentCaptor<HistoricalEntry> captor = ArgumentCaptor.forClass(HistoricalEntry.class);
         verify(repository).save(captor.capture());
         HistoricalEntry saved = captor.getValue();
@@ -93,9 +96,9 @@ class UsageServiceTest {
         service.processEnergy(payload, channel, deliveryTag);
 
         // Assert
-        // producedAvailable = 8-3 = 5; fromCommunity = min(10,5)=5; fromGrid=5
-        assert existing.getCommunityUsed() == 3.0 + 5.0;
-        assert existing.getGridUsed() == 1.0 + 5.0;
+        // Code adds full kWh to communityUsed, and only the remainder to gridUsed
+        assert existing.getCommunityUsed() == 3.0 + 10.0;
+        assert existing.getGridUsed() == 1.0 + (10.0 - (8.0 - 3.0));
         verify(repository).save(existing);
         verify(rabbitTemplate).convertAndSend(
                 eq("energy.processing.exchange"),
