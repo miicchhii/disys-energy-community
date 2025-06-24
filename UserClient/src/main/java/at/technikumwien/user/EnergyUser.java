@@ -25,7 +25,7 @@ public class EnergyUser {
     private final ObjectMapper mapper = new ObjectMapper();
     private final Random random = new Random();
     private final DateTimeFormatter fmt = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
-    EnergyMessage msg = new EnergyMessage();
+
     public EnergyUser() {
         factory = new ConnectionFactory();
         factory.setHost(RABBITMQ_HOST);
@@ -38,6 +38,7 @@ public class EnergyUser {
 
 
             while (true) {
+                EnergyMessage msg = new EnergyMessage();
                 LocalDateTime now = LocalDateTime.now();
                 double kwh = generateUsage(now.getHour());
                 String timestamp = LocalDateTime.now().format(fmt);
