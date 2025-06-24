@@ -17,8 +17,8 @@ class EnergyServiceUnitTest {
 
     @BeforeEach
     void setUp() {
-        // Mit Demo-Daten vom 2025-01-10 über 5 Tage
-        energyService = new EnergyService();
+        //Mit Demo-Daten vom 2025-01-10 über 5 Tage
+        //energyService = new EnergyService();
     }
 
     @Test
