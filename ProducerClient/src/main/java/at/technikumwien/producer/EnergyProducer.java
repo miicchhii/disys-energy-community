@@ -45,7 +45,9 @@ public class EnergyProducer {
             channel.queueDeclare(QUEUE_NAME, true, false, false, null);
 
 
+
             while (true) {
+
                 EnergyMessage msg = new EnergyMessage();
                 double weatherFactor = fetchWeatherFactor();
                 // Basisproduktion zwischen 0.001 und 0.005 kWh
@@ -63,7 +65,9 @@ public class EnergyProducer {
 
                 System.out.printf("[Producer] Sent -> kWh: %s | Timestamp: %s%n", msg.getKwh(), msg.getDatetime());
 
+
                 TimeUnit.SECONDS.sleep(5);
+
             }
         }
     }
