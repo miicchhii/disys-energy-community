@@ -1,5 +1,4 @@
-/Users/christophblank/FHTW/DISSYS/TestingNew/disys-energy-community/database/src/main/java/at/technikumwien/database/entity/HistoricalEntry.java
-/Users/christophblank/FHTW/DISSYS/TestingNew/disys-energy-community/database/src/main/java/at/technikumwien/database/DatabaseApplication.java
-/Users/christophblank/FHTW/DISSYS/TestingNew/disys-energy-community/database/src/main/java/at/technikumwien/database/entity/CurrentEntry.java
-/Users/christophblank/FHTW/DISSYS/TestingNew/disys-energy-community/database/src/main/java/at/technikumwien/database/repository/HistoricalEntryRepository.java
-/Users/christophblank/FHTW/DISSYS/TestingNew/disys-energy-community/database/src/main/java/at/technikumwien/database/repository/CurrentEntryRepository.java
+C:\AAA BWI\SEM4\Distributed Systems\Projekt\disys-energy-community\database\src\main\java\at\technikumwien\database\repository\CurrentEntryRepository.java
+C:\AAA BWI\SEM4\Distributed Systems\Projekt\disys-energy-community\database\src\main\java\at\technikumwien\database\repository\HistoricalEntryRepository.java
+C:\AAA BWI\SEM4\Distributed Systems\Projekt\disys-energy-community\database\src\main\java\at\technikumwien\database\entity\HistoricalEntry.java
+C:\AAA BWI\SEM4\Distributed Systems\Projekt\disys-energy-community\database\src\main\java\at\technikumwien\database\entity\CurrentEntry.java

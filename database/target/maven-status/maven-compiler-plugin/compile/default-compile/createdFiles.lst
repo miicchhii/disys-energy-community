@@ -1,0 +1,4 @@
+at\technikumwien\database\repository\CurrentEntryRepository.class
+at\technikumwien\database\entity\HistoricalEntry.class
+at\technikumwien\database\entity\CurrentEntry.class
+at\technikumwien\database\repository\HistoricalEntryRepository.class
