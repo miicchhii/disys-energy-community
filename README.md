@@ -11,7 +11,8 @@ infrastructure/docker-compose.yml
 backend/src/main/java/at/technikumwien/backend/BackendApplication.java
 
 ### 3. Start Frontend
-frontend/src/main/java/at/technikumwien/frontend/EnergyApplication.java
+frontend/src/main/java/at/technikumwien/frontend/EnergyApplication.java 
+or go to the maven sidebar and run frontend/plugins/javafx/javafx:run
 
 ### 4. Start Rabbitmq Services
 
